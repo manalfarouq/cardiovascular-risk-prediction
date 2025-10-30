@@ -16,8 +16,15 @@ from sqlalchemy import create_engine, Column, Integer
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 
+
+
 #! Etape 2 ---- Créer l'application FastAPI ----
 app = FastAPI(title="API de Prédiction de Risque Cardiovasculaire")  #? Ça crée l'application web
+
+# === Endpoint racine ===
+@app.get("/")
+def home():
+    return {"message": "Bienvenue sur l'API de Prédiction de Risque Cardiovasculaire!"}
 
 
 #! Etape 3 ---- Créer la base de données ----
@@ -52,7 +59,7 @@ class Patient(Base):
 
 #! Etape 5 ---- Creer la table dans la base ----
 Base.metadata.create_all(bind=engine)
-#* => FastAPI va demander à SQLAlchemy de créer la table items dans ton fichier test.db
+#* => FastAPI va demander à SQLAlchemy de créer la table items dans ton fichier patient.db
 
 #! Etape 6 ---- Connexion à la base ----
 def get_db():
@@ -136,12 +143,6 @@ async def list_patients(db: Session = Depends(get_db)):
     patients = db.query(Patient).all()
     return patients
 
-
-#! Étape 11 ---- Endpoint racine ----
-
-@app.get("/")
-def home():
-    return {"message": "Bienvenue sur l'API de Prédiction !"}
 
 # # Création de l'application
 # app = FastAPI(title="API de Prédiction - Modèle Machine Learning")
