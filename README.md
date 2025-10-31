@@ -117,7 +117,8 @@ python
 Copier le code
 Pipeline([
     ('scaler', StandardScaler()),
-    ('model', LogisticRegression())
+    ('model', RandomForestClassifier(), 
+    XGBOOSt())
 ])
 Étapes principales :
 Chargement et nettoyage du dataset (via pandas)
@@ -141,42 +142,20 @@ POST	/patients	Ajouter un patient
 GET	/patients	Lister les patients
 POST	/predict_risk	Prédire le risque cardio-vasculaire
 
-Exemple JSON :
-json
-Copier le code
-{
-  "age": 54,
-  "sex": "male",
-  "cholesterol": 230,
-  "blood_pressure": 140,
-  "smoking": 1
-}
+
 ## Tests Unitaires :
-Les tests sont réalisés avec pytest et TestClient de FastAPI.
+Les tests unitaires sont implémentés avec pytest et le TestClient de FastAPI afin de valider le bon fonctionnement de l’API.
+Les tests ont pour but de vérifier :
 
-Exemple :
-python
-Copier le code
-from fastapi.testclient import TestClient
-from main import app
-
-client = TestClient(app)
-
-def test_predict_risk():
-    response = client.post("/predict_risk", json={"age": 45, "sex": "male", "cholesterol": 210})
-    assert response.status_code == 200
-Les tests vérifient :
-
-la validité du status_code
-
-la cohérence des entrées/sorties JSON
+- Le code de statut HTTP retourné par l’API (status_code == 200)
+- La cohérence des données JSON entre les entrées et les sorties
 
 ## Documentation :
 FastAPI fournit une documentation interactive intégrée :
 
-Swagger UI 👉 http://127.0.0.1:8000/docs
+Swagger UI 👉 http://127.0.0.1:8000/docs 
 
-ReDoc 👉 http://127.0.0.1:8000/redoc
+
 
 ## Exécution du Projet :
 Lancer le serveur local :
@@ -190,14 +169,10 @@ L’API sera disponible sur :
 ## Contribuer :
 Les contributions sont les bienvenues !
 
-Forkez le dépôt
-
-Créez une nouvelle branche (feature/ma-fonctionnalite)
-
-Apportez vos modifications
-
-Soumettez une pull request
-
 ## Contact :
+👩‍💻 Asmae
+📧 fatimamachay5@gmail.com
+👩‍💻 Asmae
+📧 fatimamachay5@gmail.com
 👩‍💻 Fatima MACHAY
 📧 fatimamachay5@gmail.com
