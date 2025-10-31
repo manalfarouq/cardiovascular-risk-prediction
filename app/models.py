@@ -7,6 +7,8 @@ from .database import Base
 # === joblib ===
 import joblib
 import numpy as np
+import pandas as pd
+import os
 
 #! Etape 4 ---- Definir un 'modele' ----=> c'est une classe qui décrit comment sera ta table dans la base
 from sqlalchemy import Column, Integer, Float
@@ -27,24 +29,37 @@ class Patient(Base):                          #? Cette classe = table dans la ba
 
 # === Charger le modèle ===
 def load_model():
-    model_path = "../src/best_model_rf.pkl"  
-    model = joblib.load(model_path)
-    return model
+    # Trouve le dossier courant du fichier models.py
+    base_dir = os.path.dirname(__file__)
+    
+    # Construit le chemin absolu vers src/best_model_rf.pkl
+    model_path = os.path.join(base_dir, "../src/best_model_rf.pkl")
+    model_path = os.path.abspath(model_path)  # pour éviter les erreurs de chemin relatif
+    
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Modèle introuvable à : {model_path}")
+    
+    return joblib.load(model_path)
 
 model = load_model()                   #? Charger le modèle une seule fois (singleton)
 
 
 # === Endpoint de prédiction ===
-def predict_risk(data: list):
+def predict_risk(features):
     """
-    data: liste de valeurs [age, gender, pressure_high, pressure_low, glucose, kcm, troponin, impulse]
-    Retourne la prédiction.
+    Prend une liste de valeurs et renvoie la prédiction du modèle
     """
-    features = np.array([data])        #? transformer en tableau 2D pour sklearn
-
-    # Prédiction avec le modèle
-    prediction = model.predict(features)[0]
-
-    return {
-        "prediction": int(prediction)
-    }
+    columns = [
+        "age",
+        "pressurehight",  # ← Changed to match the model's expected column name
+        "pressurelow",
+        "glucose",
+        "kcm",
+        "troponin",
+        "impluse"
+    ]
+    
+    # On transforme la liste en DataFrame (comme pendant l'entraînement)
+    df = pd.DataFrame([features], columns=columns)
+    prediction = model.predict(df)[0]
+    return int(prediction)

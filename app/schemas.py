@@ -27,7 +27,7 @@ class PatientRespond(PatientCreate):
         
 # FastAPI → reçoit JSON ⮕ valide avec PatientCreate ⮕ envoie résultat avec PatientRespond
 
-
+#* ===Prediction===
 class InputData(BaseModel):
     """
     Pourquoi ?
@@ -35,13 +35,12 @@ class InputData(BaseModel):
         -> Réutiliser PatientCreate pour ajouter des patients et InputData pour faire des prédictions.
     """
     age: int = Field(..., ge=1, le=120)
-    gender: int = Field(..., ge=0, le=1)       # 0 = femme, 1 = homme
-    pressure_high: float = Field(..., ge=50, le=250)
-    pressure_low: float = Field(..., ge=30, le=150)
+    pressurehigh: float = Field(..., ge=50, le=250)
+    pressurelow: float = Field(..., ge=30, le=150)
     glucose: float = Field(..., ge=50, le=500)
     kcm: float = Field(..., ge=0, le=200)
     troponin: float = Field(..., ge=0, le=50)
     impluse: float = Field(..., ge=30, le=200)
 
 class PredictionResponse(BaseModel):
-    prediction: int 
+    prediction: str

@@ -63,7 +63,7 @@ def home():
 
 #! Etape 8 ---- Creer un patient (POST) ---- 
 # ===Endpoint POST===
-@app.post("/patients/", response_model=schemas.PatientRespond)
+@app.post("/patients/", response_model=schemas.PatientCreate)
 async def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
     return crud.create_patient(db=db, patient=patient)
 
@@ -82,10 +82,27 @@ async def list_patients(db: Session = Depends(get_db)):
 
 # === Endpoint de prédiction ===
 @app.post("/predict", response_model=PredictionResponse)
-async def predict(data: PatientRespond):
+async def predict(data: InputData):
+    """
+    Endpoint POST /predict
+    Reçoit les données d'un patient (InputData) et renvoie une prédiction de risque.
+
+    Args:
+        data (InputData): données du patient à analyser
+
+    Returns:
+        PredictionResponse: résultat de la prédiction
+    """
     features = [
-        data.age, data.gender, data.pressure_high, data.pressure_low,
-        data.glucose, data.kcm, data.troponin, data.impluse
+        data.age, 
+        data.pressurehigh, 
+        data.pressurelow,
+        data.glucose, 
+        data.kcm, 
+        data.troponin, 
+        data.impluse
     ]
+    
     prediction = predict_risk(features)
-    return {"prediction": prediction}
+    result_text = "Positif" if prediction == 1 else "Négatif"
+    return {"prediction": result_text}
