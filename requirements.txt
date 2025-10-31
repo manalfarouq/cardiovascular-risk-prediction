@@ -4,3 +4,9 @@ matplotlib
 scikit-learn
 seaborn
 pytest
+joblib
+pydantic
+fastapi
+uvicorn
+sqlalchemy
+joblib
