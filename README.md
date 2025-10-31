@@ -1,5 +1,5 @@
 #  API de Prédiction du Risque Cardio-vasculaire
-### *Auteur :* __Asmae, __Manal,__MACHAY Fatima__  
+### *Auteur :* __Assma, __Manal,__MACHAY Fatima__  
 ### *Date :* __2025-10-31__  
 ### *Objectif :*  
 Développer une **API complète** basée sur FastAPI, connectée à une base de données SQLite et intégrant un modèle de Machine Learning pour **prédire le risque de maladies cardio-vasculaires** à partir des données cliniques d’un patient.
@@ -45,7 +45,7 @@ Travail en **trinôme** avec une répartition claire des rôles :
 - Branche principale : `main`  
 - Branche API : `feature/api`  
 - Branche Machine Learning : `feature/ml`
-- Branche Machine Learning : `feature/test`
+- Branche Test Unitaire : `feature/test`
 
 
 ----------------------------------------------------------------------------------------------------
@@ -131,8 +131,6 @@ Entraînement du modèle
 
 Sauvegarde avec :
 
-python
-Copier le code
 joblib.dump(model, "model.joblib")
 
 
