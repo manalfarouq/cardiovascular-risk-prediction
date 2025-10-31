@@ -1,3 +1,4 @@
+
 #* Ce fichier contient la logique CRUD, séparée des routes
 
 from sqlalchemy.orm import Session

@@ -39,6 +39,11 @@ from sqlalchemy.orm import Session
 from . import models, schemas, crud
 from .database import engine, get_db
 
+# === schemas.py ===
+from .schemas import *
+
+# === models.py ===
+from .models import predict_risk
 
 #* Crée toutes les tables définies dans les modèles SQLAlchemy
 #* - Base.metadata contient la "structure" de toutes les tables (Patient)
@@ -75,64 +80,12 @@ async def list_patients(db: Session = Depends(get_db)):
     return crud.get_patients(db)
 
 
-
-
-
-
-
-
-
-
-
-# # Création de l'application
-# app = FastAPI(title="API de Prédiction - Modèle Machine Learning")
-
-# # === Définition du format d'entrée ===
-# class InputData(BaseModel):
-#     age: int
-#     gender: int
-#     status: int
-#     pressure_high: int
-#     pressure_low: int
-#     glucose: float
-#     kcm : float
-#     troponin : float
-#     impluse : int
-
-# # === Chargement du modèle ===
-# def load_model():
-#     model_path = "model dialna."  
-#     model = joblib.load(model_path)
-#     return model
-
-# model = load_model()
-
-# # === Endpoint racine ===
-# @app.get("/")
-# def home():
-#     return {"message": "Bienvenue sur l'API de prédiction de risque cardiovasculaire"}
-
-# # === Endpoint de prédiction ===
-# @app.post("/predict")
-# def predict(data: InputData):
-#     # Transformation des données reçues en tableau numpy
-#     features = np.array([[ 
-#         data.age, 
-#         data.gender, 
-#         data.status, 
-#         data.pressure_high, 
-#         data.pressure_low, 
-#         data.glucose, 
-#         data.kcm, 
-#         data.troponin, 
-#         data.impulse
-#     ]])
-
-#     # Prédiction avec le modèle
-#     prediction = model.predict(features)[0]
-#     probability = model.predict_proba(features)[0].tolist() if hasattr(model, "predict_proba") else None
-
-#     return {
-#         "prediction": int(prediction),
-#         "probabilities": probability
-#     }
+# === Endpoint de prédiction ===
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(data: PatientRespond):
+    features = [
+        data.age, data.gender, data.pressure_high, data.pressure_low,
+        data.glucose, data.kcm, data.troponin, data.impluse
+    ]
+    prediction = predict_risk(features)
+    return {"prediction": prediction}
